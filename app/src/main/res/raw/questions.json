@@ -1,0 +1,36 @@
+{
+  "questions": [
+    {
+      "type": "choice",
+      "question": "What is the capital of France?",
+      "correct": "0",
+      "answers": [
+        {
+          "0": "Berlin"
+        },
+        {
+          "1": "Paris"
+        },
+        {
+          "2": "London"
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "question": "Where does the Queen of England live?",
+      "correct": "0",
+      "answers": [
+        {
+          "0": "London"
+        },
+        {
+          "1": "Paris"
+        },
+        {
+          "2": "Berlin"
+        }
+      ]
+    }
+  ]
+}
