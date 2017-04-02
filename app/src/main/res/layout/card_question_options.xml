@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -27,15 +27,16 @@
                 tools:text="What is the capital of France?" />
 
             <ViewSwitcher
+                android:id="@+id/view_switcher"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/question"
                 android:animateLayoutChanges="true">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:id="@+id/answers"
@@ -46,18 +47,23 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/answer1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
                             tools:text="A. Paris" />
 
                         <TextView
+                            android:id="@+id/answer2"
+
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
                             tools:text="B. Berlin" />
 
                         <TextView
+                            android:id="@+id/answer3"
+
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
@@ -69,49 +75,59 @@
                         android:id="@+id/buttons"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/answers"
                         android:orientation="horizontal">
 
-                        <RadioButton
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textSize="20sp"
-                            tools:text="A" />
+                        <RadioGroup
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                        <RadioButton
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textSize="20sp"
-                            tools:text="B" />
+                            <RadioButton
+                                android:id="@+id/option1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/a"
+                                android:textSize="20sp" />
 
-                        <RadioButton
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textSize="20sp"
-                            tools:text="C" />
+                            <RadioButton
+                                android:id="@+id/option2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/b"
+                                android:textSize="20sp" />
+
+                            <RadioButton
+                                android:id="@+id/option3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/c"
+                                android:textSize="20sp" />
+
+                        </RadioGroup>
 
                     </LinearLayout>
 
                     <Button
+                        android:id="@+id/submit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="@string/submit" />
+                        android:text="@string/submit"
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
                 <RelativeLayout
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
 
                     <ImageView
                         android:id="@+id/answer_result"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="100dp"
+                        android:layout_height="100dp" />
 
                 </RelativeLayout>
 

@@ -9,9 +9,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by andrewcunningham on 02/04/2017.
@@ -20,6 +18,7 @@ import java.util.HashMap;
 public class QuizMaster {
 
     Context context;
+    ArrayList<Question> questionsArray = new ArrayList<Question>();
 
     public class Question {
 
@@ -50,11 +49,19 @@ public class QuizMaster {
             sb.append("\n");
             return sb.toString();
         }
+
+        public int getQuestionType() { return questionType; }
+
+        public String getQuestion() { return question; }
+
+        public ArrayList<String> getAnswers() { return answers; }
+
+        public int[] getCorrectAnswers() { return correctAnswers; }
     }
 
     public QuizMaster(Context context) {
         this.context = context;
-        test();
+        loadQuestions();
     }
 
     public String loadJSONFromAsset(Context context) {
@@ -73,11 +80,10 @@ public class QuizMaster {
         return json;
     }
 
-    public void test() {
+    public void loadQuestions() {
         try {
             JSONObject obj = new JSONObject(loadJSONFromAsset(context));
             JSONArray questionsJSONArray = obj.getJSONArray("questions");
-            ArrayList<Question> questionsArray = new ArrayList<Question>();
 
             for (int i = 0; i < questionsJSONArray.length(); i++) {
                 JSONObject jo_inside = questionsJSONArray.getJSONObject(i);
@@ -85,9 +91,9 @@ public class QuizMaster {
                 // Type
                 int type;
                 if (jo_inside.getString("type").equals("choice")) {
-                    type = 0;
+                    type = Question.CHOICE;
                 } else {
-                    type = 1;
+                    type = Question.TEXT;
                 }
 
                 // Question
@@ -96,9 +102,11 @@ public class QuizMaster {
                 // Answers
                 ArrayList<String> answers = new ArrayList<>();
                 JSONArray answersJSON = jo_inside.getJSONArray("answers");
+                Log.d("wah", "AAC --> answersJSON: " + answersJSON);
                 for (int j = 0; j < answersJSON.length(); j++) {
-                    String answer = answersJSON.getString(i);
-                    answers.add(answer);
+                    JSONObject singleJSON = answersJSON.getJSONObject(j);
+                    String answerText = singleJSON.getString(""+j);
+                    answers.add(answerText);
                 }
                 // Correct Answer
                 int[] correctAnswers = new int[1];
@@ -117,4 +125,6 @@ public class QuizMaster {
             e.printStackTrace();
         }
     }
+
+    public ArrayList<Question> getQuestions(){ return questionsArray; }
 }

@@ -2,4 +2,7 @@
     <string name="app_name">QuizApp</string>
     <string name="submit">Submit</string>
     <string name="answer_hint">Type answer here</string>
+    <string name="a">A</string>
+    <string name="b">B</string>
+    <string name="c">C</string>
 </resources>
