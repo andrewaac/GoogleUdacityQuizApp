@@ -25,19 +25,28 @@ public class QuizMaster {
         // Finals
         public final static int CHOICE = 0;
         public final static int TEXT = 1;
+        public final static int MULTIPLE = 2;
 
         // Fields
         private String question;
         private ArrayList<String> answers;
-        private int[] correctAnswers;
+        private int[] correctAnswersInts;
+        private String correctAnswerString;
         private int questionType;
 
-        public Question(String question, ArrayList<String> answers, int[] correctAnswers, int questionType) {
+        public Question(String question, ArrayList<String> answers, int[] correctAnswersInts, int questionType) {
             this.question = question;
             this.answers = answers;
-            this.correctAnswers = correctAnswers;
+            this.correctAnswersInts = correctAnswersInts;
             this.questionType = questionType;
         }
+
+        public Question(String question, String correctAnswerString, int questionType) {
+            this.question = question;
+            this.correctAnswerString = correctAnswerString;
+            this.questionType = questionType;
+        }
+
 
         public String toString() {
             StringBuilder sb = new StringBuilder();
@@ -45,18 +54,32 @@ public class QuizMaster {
             sb.append(question);
             sb.append("\n");
             sb.append("Answers: ");
-            sb.append(answers.toArray().toString());
+            if (answers != null) {
+                sb.append(answers.toArray().toString());
+            }
             sb.append("\n");
             return sb.toString();
         }
 
-        public int getQuestionType() { return questionType; }
+        public int getQuestionType() {
+            return questionType;
+        }
 
-        public String getQuestion() { return question; }
+        public String getQuestion() {
+            return question;
+        }
 
-        public ArrayList<String> getAnswers() { return answers; }
+        public ArrayList<String> getAnswers() {
+            return answers;
+        }
 
-        public int[] getCorrectAnswers() { return correctAnswers; }
+        public int[] getCorrectAnswersInts() {
+            return correctAnswersInts;
+        }
+
+        public String getCorrectAnswerString() {
+            return correctAnswerString;
+        }
     }
 
     public QuizMaster(Context context) {
@@ -89,42 +112,69 @@ public class QuizMaster {
                 JSONObject jo_inside = questionsJSONArray.getJSONObject(i);
 
                 // Type
-                int type;
+                int type = -1;
                 if (jo_inside.getString("type").equals("choice")) {
                     type = Question.CHOICE;
-                } else {
+                } else if (jo_inside.getString("type").equals("text")) {
                     type = Question.TEXT;
+                } else if (jo_inside.getString("type").equals("multiple")) {
+                    type = Question.MULTIPLE;
                 }
 
                 // Question
                 String questionString = jo_inside.getString("question");
 
-                // Answers
-                ArrayList<String> answers = new ArrayList<>();
-                JSONArray answersJSON = jo_inside.getJSONArray("answers");
-                Log.d("wah", "AAC --> answersJSON: " + answersJSON);
-                for (int j = 0; j < answersJSON.length(); j++) {
-                    JSONObject singleJSON = answersJSON.getJSONObject(j);
-                    String answerText = singleJSON.getString(""+j);
-                    answers.add(answerText);
+                if (type == Question.CHOICE || type == Question.MULTIPLE) {
+
+                    // Correct Answer(s)
+                    int[] correctAnswers;
+                    if(type == Question.CHOICE) {
+                        correctAnswers = new int[1];
+                        correctAnswers[0] = (int) Integer.valueOf(jo_inside.getString("correct"));
+                    } else {
+                        JSONArray jsonCorrectAnswers = jo_inside.getJSONArray("correct");
+                        correctAnswers = new int[jsonCorrectAnswers.length()];
+                        for(int j = 0; j < jsonCorrectAnswers.length(); j++){
+                            correctAnswers[j] = (int) jsonCorrectAnswers.get(j);
+                        }
+                    }
+
+                    // Answers
+                    ArrayList<String> answers = new ArrayList<>();
+                    JSONArray answersJSON = jo_inside.getJSONArray("answers");
+                    Log.d("wah", "AAC --> answersJSON: " + answersJSON);
+                    for (int j = 0; j < answersJSON.length(); j++) {
+                        JSONObject singleJSON = answersJSON.getJSONObject(j);
+                        String answerText = singleJSON.getString("" + j);
+                        answers.add(answerText);
+                    }
+
+                    Question question = new Question(
+                            questionString,
+                            answers,
+                            correctAnswers,
+                            type);
+
+                    Log.d("WAH", "AAC --> " + question.toString());
+                    questionsArray.add(question);
                 }
-                // Correct Answer
-                int[] correctAnswers = new int[1];
-                correctAnswers[0] = (int) Integer.valueOf(jo_inside.getString("correct"));
 
-                Question question = new Question(
-                        questionString,
-                        answers,
-                        correctAnswers,
-                        type);
+                if (type == Question.TEXT) {
+                    // Correct Answer
+                    String correctAnswer = jo_inside.getString("correct");
+                    Question question = new Question(questionString, correctAnswer, type);
 
-                Log.d("WAH", "AAC --> " + question.toString());
-                questionsArray.add(question);
+                    Log.d("WAH", "AAC --> " + question.toString());
+                    questionsArray.add(question);
+                }
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList<Question> getQuestions(){ return questionsArray; }
+    public ArrayList<Question> getQuestions() {
+        return questionsArray;
+    }
 }

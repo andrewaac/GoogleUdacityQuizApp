@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -27,6 +27,7 @@
                 tools:text="What is the capital of France?" />
 
             <ViewSwitcher
+                android:id="@+id/view_switcher"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/question"
@@ -35,18 +36,22 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:orientation="vertical">
 
                     <EditText
-                        android:hint="@string/answer_hint"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <Button
+                        android:id="@+id/answer_entry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="@string/submit" />
+                        android:hint="@string/answer_hint" />
+
+                    <Button
+                        android:id="@+id/submit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/submit"
+                        android:textSize="20sp" />
 
 
                 </LinearLayout>
@@ -54,12 +59,14 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:layout_gravity="center">
 
                     <ImageView
                         android:id="@+id/answer_result"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="100dp"
+                        android:layout_height="100dp" />
 
                 </RelativeLayout>
 

@@ -1,7 +1,6 @@
 package com.googleudacity.andrewcunningham.quizapp;
 
 import android.content.Context;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,14 +8,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
                 case QuizMaster.Question.CHOICE:
                     View choiceView = layoutInflater.inflate(R.layout.card_question_options, parent, false);
                     return new OptionQuestionViewHolder(choiceView);
+                case QuizMaster.Question.TEXT:
+                    View textView = layoutInflater.inflate(R.layout.card_question_submit, parent, false);
+                    return new TextQuestionViewHolder(textView);
+                case QuizMaster.Question.MULTIPLE:
+                    View multipleView = layoutInflater.inflate(R.layout.card_question_multiple, parent, false);
+                    return new MultipleQuestionViewHolder(multipleView);
                 default:
                     return null;
             }
@@ -60,7 +69,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ((OptionQuestionViewHolder) holder).bind(questions.get(position));
+            if (holder instanceof OptionQuestionViewHolder) {
+                ((OptionQuestionViewHolder) holder).bind(questions.get(position));
+            } else if (holder instanceof TextQuestionViewHolder) {
+                ((TextQuestionViewHolder) holder).bind(questions.get(position));
+            } else if (holder instanceof MultipleQuestionViewHolder) {
+                ((MultipleQuestionViewHolder) holder).bind(questions.get(position));
+            }
         }
 
         @Override
@@ -68,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             return questions.size();
         }
 
-        public class OptionQuestionViewHolder extends RecyclerView.ViewHolder{
+        public class OptionQuestionViewHolder extends RecyclerView.ViewHolder {
 
             ViewSwitcher viewSwitcher;
             ImageView answerResult;
@@ -108,15 +123,80 @@ public class MainActivity extends AppCompatActivity {
                 answer3.setText("C: " + question.getAnswers().get(2));
             }
 
-            public void checkAnswer(){
-                if(radioButtons[question.getCorrectAnswers()[0]].isChecked()){
+            public void checkAnswer() {
+                if (radioButtons[question.getCorrectAnswersInts()[0]].isChecked()) {
                     answerResult.setImageResource(R.drawable.success);
-                } else{
+                } else {
                     answerResult.setImageResource(R.drawable.error);
                 }
                 viewSwitcher.setDisplayedChild(1);
             }
         }
+
+        public class TextQuestionViewHolder extends OptionQuestionViewHolder {
+
+            EditText answerEntry;
+
+            public TextQuestionViewHolder(View itemView) {
+                super(itemView);
+                answerEntry = (EditText) itemView.findViewById(R.id.answer_entry);
+            }
+
+            @Override
+            public void bind(QuizMaster.Question question) {
+                this.question = question;
+                questionTextView.setText(question.getQuestion());
+            }
+
+            @Override
+            public void checkAnswer() {
+                if (answerEntry.getText().toString().toLowerCase().trim().equals(question.getCorrectAnswerString().toLowerCase().trim())) {
+                    answerResult.setImageResource(R.drawable.success);
+                } else {
+                    answerResult.setImageResource(R.drawable.error);
+                }
+                viewSwitcher.setDisplayedChild(1);
+            }
+        }
+
+        public class MultipleQuestionViewHolder extends OptionQuestionViewHolder {
+
+            CheckBox option1, option2, option3;
+            CheckBox[] checkBoxes;
+
+            public MultipleQuestionViewHolder(View itemView) {
+                super(itemView);
+                option1 = (CheckBox) itemView.findViewById(R.id.choice1);
+                option2 = (CheckBox) itemView.findViewById(R.id.choice2);
+                option3 = (CheckBox) itemView.findViewById(R.id.choice3);
+                checkBoxes = new CheckBox[]{option1, option2, option3};
+            }
+
+            @Override
+            public void checkAnswer() {
+                int correct = R.drawable.error;
+                int[] correctAnswers = question.getCorrectAnswersInts();
+                ArrayList<Integer> correctAnswersArray = new ArrayList<>();
+                for (int correctAnswer : correctAnswers) {
+                    correctAnswersArray.add(correctAnswer);
+                }
+
+                ArrayList<Integer> checkedBoxes = new ArrayList<>();
+                for (int y = 0; y < checkBoxes.length; y++) {
+                    if (checkBoxes[y].isChecked()) {
+                        checkedBoxes.add(y);
+                    }
+                }
+
+                if (correctAnswersArray.equals(checkedBoxes)) {
+                    correct = R.drawable.success;
+                }
+
+                answerResult.setImageResource(correct);
+                viewSwitcher.setDisplayedChild(1);
+            }
+        }
+
     }
 }
 

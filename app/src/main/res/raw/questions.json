@@ -3,7 +3,7 @@
     {
       "type": "choice",
       "question": "What is the capital of France?",
-      "correct": "0",
+      "correct": "1",
       "answers": [
         {
           "0": "Berlin"
@@ -29,6 +29,135 @@
         },
         {
           "2": "Berlin"
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "question": "What's the spanish word for father??",
+      "correct": "2",
+      "answers": [
+        {
+          "0": "Madre"
+        },
+        {
+          "1": "Novio"
+        },
+        {
+          "2": "Padre"
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "question": "What type of factory did Willy Wonka own?",
+      "correct": "1",
+      "answers": [
+        {
+          "0": "Bicycle"
+        },
+        {
+          "1": "Chocolate"
+        },
+        {
+          "2": "Car"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "question": "What colour is the sky?",
+      "correct": "blue"
+    },
+    {
+      "type": "text",
+      "question": "What African herbivore has four legs and a very long neck?",
+      "correct": "giraffe"
+    },
+    {
+      "type": "text",
+      "question": "In the day we see the sun, at night we see the _______?",
+      "correct": "moon"
+    },
+    {
+      "type": "text",
+      "question": "What artist came out with the song Toxic?",
+      "correct": "britney spears"
+    },
+    {
+      "type": "multiple",
+      "question": "Which numbers are prime?",
+      "correct": [
+        0,
+        1
+      ],
+      "answers": [
+        {
+          "0": "17"
+        },
+        {
+          "1": "3"
+        },
+        {
+          "2": "2"
+        }
+      ]
+    },
+    {
+      "type": "multiple",
+      "question": "Which two characters are wizards?",
+      "correct": [
+        0,
+        2
+      ],
+      "answers": [
+        {
+          "0": "Harry Potter"
+        },
+        {
+          "1": "Shrek"
+        },
+        {
+          "2": "Dumbledore"
+        }
+      ]
+    },
+    {
+      "type": "mutliple",
+      "question": "What ingredients are in a BLT?",
+      "correct": [
+        0,
+        1,
+        2
+      ],
+      "answers": [
+        {
+          "0": "Bacon"
+        },
+        {
+          "1": "Lettuce"
+        },
+        {
+          "2": "Tomato"
+        }
+      ]
+    },
+    {
+      "type": "multiple",
+      "question": "Which songs are by Lady Gaga?",
+      "correct": [
+        1,
+        2
+      ],
+      "answers": [
+        {
+          "0": "Jingle Bells"
+        },
+        {
+          "1": "Born This Way"
+        },
+        {
+          "2": "Poker Face"
         }
       ]
     }
