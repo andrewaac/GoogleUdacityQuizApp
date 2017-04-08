@@ -26,6 +26,10 @@ public class QuestionAdapter extends RecyclerView.Adapter {
         layoutInflater = LayoutInflater.from(context);
     }
 
+    public void refreshEverything(ArrayList<QuizMaster.Question> questions){
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         return questions.get(position).getQuestionType();

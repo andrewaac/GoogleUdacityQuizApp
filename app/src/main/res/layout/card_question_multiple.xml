@@ -23,7 +23,7 @@
                 android:id="@+id/question"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                style="@style/QuestionTextStyle"
                 tools:text="What is the capital of France?" />
 
             <ViewSwitcher
@@ -50,7 +50,7 @@
                             android:id="@+id/answer1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
+                            style="@style/AnswerTextStyle"
                             tools:text="A. Paris" />
 
                         <TextView
@@ -58,15 +58,14 @@
 
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
+                            style="@style/AnswerTextStyle"
                             tools:text="B. Berlin" />
 
                         <TextView
                             android:id="@+id/answer3"
-
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
+                            style="@style/AnswerTextStyle"
                             tools:text="C. London" />
 
                     </LinearLayout>
@@ -104,11 +103,11 @@
                     </LinearLayout>
 
                     <Button
+                        style="@style/SubmitButtonTheme"
                         android:id="@+id/submit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/submit"
-                        android:textSize="20sp" />
+                        android:text="@string/submit" />
 
                 </LinearLayout>
 
