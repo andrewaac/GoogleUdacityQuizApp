@@ -12,13 +12,14 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
- * Created by andrewcunningham on 02/04/2017.
+ * The QuizMaster class is responsible for taking the questions out of the the question.json file
+ * and passing them back to whatever requests it.
  */
 
 public class QuizMaster {
 
-    Context context;
-    ArrayList<Question> questionsArray = new ArrayList<Question>();
+    private Context context;
+    private ArrayList<Question> questionsArray = new ArrayList<Question>();
 
     public class Question {
 
@@ -87,6 +88,12 @@ public class QuizMaster {
         loadQuestions();
     }
 
+    /**
+     * Loads the JSON String from the questions.json file
+     *
+     * @param context
+     * @return
+     */
     public String loadJSONFromAsset(Context context) {
         String json = null;
         try {
@@ -103,7 +110,11 @@ public class QuizMaster {
         return json;
     }
 
+    /**
+     * Splits the JSON String up in order to create Question objects.
+     */
     public void loadQuestions() {
+        questionsArray.clear();
         try {
             JSONObject obj = new JSONObject(loadJSONFromAsset(context));
             JSONArray questionsJSONArray = obj.getJSONArray("questions");

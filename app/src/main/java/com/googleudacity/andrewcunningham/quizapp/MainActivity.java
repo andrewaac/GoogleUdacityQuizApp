@@ -1,33 +1,18 @@
 package com.googleudacity.andrewcunningham.quizapp;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.ViewSwitcher;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
+    private RecyclerView recyclerView;
     private QuestionAdapter questionAdapter;
     private QuizMaster quizMaster;
 
@@ -37,11 +22,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         quizMaster = new QuizMaster(this);
 
-        RecyclerView rv = (RecyclerView) findViewById(R.id.questions_recycler);
+        recyclerView = (RecyclerView) findViewById(R.id.questions_recycler);
         LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);
+        recyclerView.setLayoutManager(llm);
         questionAdapter = new QuestionAdapter(this, quizMaster.getQuestions());
-        rv.setAdapter(questionAdapter);
+        recyclerView.setAdapter(questionAdapter);
     }
 
     @Override
@@ -51,19 +36,30 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * If the restart button is pressed, an AlertDialog should be shown to the user giving them the
+     * option to cancel or OK.
+     *
+     * If they press OK, then the RecyclerView is reset and the user can answer the questions again.
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         new AlertDialog.Builder(this)
-                .setTitle("Quiz will be restarted")
-                .setMessage("If you press OK, this quiz will be restarted.")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.quiz_restart_title)
+                .setMessage(R.string.quiz_restart_desc)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         quizMaster.loadQuestions();
-                        questionAdapter.refreshEverything(quizMaster.getQuestions());
+                        recyclerView.setAdapter(null);
+                        recyclerView.setAdapter(questionAdapter);
+                        questionAdapter.notifyDataSetChanged();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

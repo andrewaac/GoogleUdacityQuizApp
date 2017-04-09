@@ -1,7 +1,10 @@
 package com.googleudacity.andrewcunningham.quizapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +20,34 @@ import java.util.ArrayList;
 
 public class QuestionAdapter extends RecyclerView.Adapter {
 
-
+    private Context context;
+    private int correctAnswers = 0;
+    private int questionsAnswered = 0;
     private ArrayList<QuizMaster.Question> questions;
     private LayoutInflater layoutInflater;
 
     public QuestionAdapter(Context context, ArrayList<QuizMaster.Question> questions) {
+        this.context = context;
         this.questions = questions;
         layoutInflater = LayoutInflater.from(context);
     }
 
-    public void refreshEverything(ArrayList<QuizMaster.Question> questions){
-        notifyDataSetChanged();
+    private void updateScore(boolean correct) {
+        questionsAnswered++;
+        if (correct) correctAnswers++;
+        if (questionsAnswered == questions.size()) {
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.quiz_over)
+                    .setMessage(context.getString(R.string.score, correctAnswers))
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setCancelable(true)
+                    .show();
+        }
     }
 
     @Override
@@ -68,7 +88,7 @@ public class QuestionAdapter extends RecyclerView.Adapter {
         return questions.size();
     }
 
-    public class OptionQuestionViewHolder extends RecyclerView.ViewHolder {
+    private class OptionQuestionViewHolder extends RecyclerView.ViewHolder {
 
         ViewSwitcher viewSwitcher;
         ImageView answerResult;
@@ -77,7 +97,7 @@ public class QuestionAdapter extends RecyclerView.Adapter {
         Button submit;
         QuizMaster.Question question;
 
-        public OptionQuestionViewHolder(View itemView) {
+        OptionQuestionViewHolder(View itemView) {
             super(itemView);
             questionTextView = (TextView) itemView.findViewById(R.id.question);
             answer1 = (TextView) itemView.findViewById(R.id.answer1);
@@ -111,18 +131,20 @@ public class QuestionAdapter extends RecyclerView.Adapter {
         public void checkAnswer() {
             if (radioButtons[question.getCorrectAnswersInts()[0]].isChecked()) {
                 answerResult.setImageResource(R.drawable.success);
+                updateScore(true);
             } else {
                 answerResult.setImageResource(R.drawable.error);
+                updateScore(false);
             }
             viewSwitcher.setDisplayedChild(1);
         }
     }
 
-    public class TextQuestionViewHolder extends QuestionAdapter.OptionQuestionViewHolder {
+    private class TextQuestionViewHolder extends QuestionAdapter.OptionQuestionViewHolder {
 
         EditText answerEntry;
 
-        public TextQuestionViewHolder(View itemView) {
+        TextQuestionViewHolder(View itemView) {
             super(itemView);
             answerEntry = (EditText) itemView.findViewById(R.id.answer_entry);
         }
@@ -137,19 +159,21 @@ public class QuestionAdapter extends RecyclerView.Adapter {
         public void checkAnswer() {
             if (answerEntry.getText().toString().toLowerCase().trim().equals(question.getCorrectAnswerString().toLowerCase().trim())) {
                 answerResult.setImageResource(R.drawable.success);
+                updateScore(true);
             } else {
                 answerResult.setImageResource(R.drawable.error);
+                updateScore(false);
             }
             viewSwitcher.setDisplayedChild(1);
         }
     }
 
-    public class MultipleQuestionViewHolder extends QuestionAdapter.OptionQuestionViewHolder {
+    private class MultipleQuestionViewHolder extends QuestionAdapter.OptionQuestionViewHolder {
 
         CheckBox option1, option2, option3;
         CheckBox[] checkBoxes;
 
-        public MultipleQuestionViewHolder(View itemView) {
+        MultipleQuestionViewHolder(View itemView) {
             super(itemView);
             option1 = (CheckBox) itemView.findViewById(R.id.choice1);
             option2 = (CheckBox) itemView.findViewById(R.id.choice2);
@@ -175,6 +199,9 @@ public class QuestionAdapter extends RecyclerView.Adapter {
 
             if (correctAnswersArray.equals(checkedBoxes)) {
                 correct = R.drawable.success;
+                updateScore(true);
+            } else {
+                updateScore(false);
             }
 
             answerResult.setImageResource(correct);

@@ -6,4 +6,10 @@
     <string name="b">B</string>
     <string name="c">C</string>
     <string name="restart">Restart</string>
+    <string name="quiz_over">Quiz Finished!</string>
+    <string name="score">You got %d</string>
+    <string name="ok">OK</string>
+    <string name="quiz_restart_title">Quiz will be restarted</string>
+    <string name="quiz_restart_desc">If you press OK, this quiz will be restarted.</string>
+    <string name="cancel">Cancel</string>
 </resources>
