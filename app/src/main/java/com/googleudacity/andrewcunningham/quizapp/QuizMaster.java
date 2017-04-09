@@ -20,6 +20,14 @@ public class QuizMaster {
 
     private Context context;
     private ArrayList<Question> questionsArray = new ArrayList<Question>();
+    private static final String QUESTIONS = "questions";
+    private static final String QUESTION = "question";
+    private static final String TYPE = "type";
+    private static final String CHOICE = "choice";
+    private static final String TEXT = "text";
+    private static final String MULTIPLE = "multiple";
+    private static final String CORRECT = "correct";
+    private static final String ANSWERS = "answers";
 
     public class Question {
 
@@ -117,23 +125,23 @@ public class QuizMaster {
         questionsArray.clear();
         try {
             JSONObject obj = new JSONObject(loadJSONFromAsset(context));
-            JSONArray questionsJSONArray = obj.getJSONArray("questions");
+            JSONArray questionsJSONArray = obj.getJSONArray(QUESTIONS);
 
             for (int i = 0; i < questionsJSONArray.length(); i++) {
                 JSONObject jo_inside = questionsJSONArray.getJSONObject(i);
 
                 // Type
                 int type = -1;
-                if (jo_inside.getString("type").equals("choice")) {
+                if (jo_inside.getString(TYPE).equals(CHOICE)) {
                     type = Question.CHOICE;
-                } else if (jo_inside.getString("type").equals("text")) {
+                } else if (jo_inside.getString(TYPE).equals(TEXT)) {
                     type = Question.TEXT;
-                } else if (jo_inside.getString("type").equals("multiple")) {
+                } else if (jo_inside.getString(TYPE).equals(MULTIPLE)) {
                     type = Question.MULTIPLE;
                 }
 
                 // Question
-                String questionString = jo_inside.getString("question");
+                String questionString = jo_inside.getString(QUESTION);
 
                 if (type == Question.CHOICE || type == Question.MULTIPLE) {
 
@@ -141,9 +149,9 @@ public class QuizMaster {
                     int[] correctAnswers;
                     if(type == Question.CHOICE) {
                         correctAnswers = new int[1];
-                        correctAnswers[0] = (int) Integer.valueOf(jo_inside.getString("correct"));
+                        correctAnswers[0] = (int) Integer.valueOf(jo_inside.getString(CORRECT));
                     } else {
-                        JSONArray jsonCorrectAnswers = jo_inside.getJSONArray("correct");
+                        JSONArray jsonCorrectAnswers = jo_inside.getJSONArray(CORRECT);
                         correctAnswers = new int[jsonCorrectAnswers.length()];
                         for(int j = 0; j < jsonCorrectAnswers.length(); j++){
                             correctAnswers[j] = (int) jsonCorrectAnswers.get(j);
@@ -152,8 +160,7 @@ public class QuizMaster {
 
                     // Answers
                     ArrayList<String> answers = new ArrayList<>();
-                    JSONArray answersJSON = jo_inside.getJSONArray("answers");
-                    Log.d("wah", "AAC --> answersJSON: " + answersJSON);
+                    JSONArray answersJSON = jo_inside.getJSONArray(ANSWERS);
                     for (int j = 0; j < answersJSON.length(); j++) {
                         JSONObject singleJSON = answersJSON.getJSONObject(j);
                         String answerText = singleJSON.getString("" + j);
@@ -166,16 +173,14 @@ public class QuizMaster {
                             correctAnswers,
                             type);
 
-                    Log.d("WAH", "AAC --> " + question.toString());
                     questionsArray.add(question);
                 }
 
                 if (type == Question.TEXT) {
                     // Correct Answer
-                    String correctAnswer = jo_inside.getString("correct");
+                    String correctAnswer = jo_inside.getString(CORRECT);
                     Question question = new Question(questionString, correctAnswer, type);
 
-                    Log.d("WAH", "AAC --> " + question.toString());
                     questionsArray.add(question);
                 }
 
