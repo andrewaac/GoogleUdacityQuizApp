@@ -11,11 +11,7 @@
     </style>
 
     <!-- Button Style -->
-    <style name="ButtonStyle" parent="@android:style/ButtonBar">
-        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
-    </style>
-
-    <style name="SubmitButtonTheme" parent="ButtonStyle">
+    <style name="SubmitButtonTheme">
         <item name="android:layout_margin">5dp</item>
         <item name="android:background">@drawable/background</item>
         <item name="android:textColor">@color/white</item>
